@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ChirpController;
+use App\Http\Controllers\MovieController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+Route::get("/movies", [MovieController::class, "index"])->middleware(["auth", "verified"]);
 
 
 Route::get('/dashboard', function () {
