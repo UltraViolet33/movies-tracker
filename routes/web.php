@@ -30,4 +30,7 @@ Route::resource('chirps', ChirpController::class)
 
 
 
+
+
+
 require __DIR__.'/auth.php';
