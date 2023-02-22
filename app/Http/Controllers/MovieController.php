@@ -13,4 +13,11 @@ class MovieController extends Controller
     {
         return view("movies.index");
     }
+
+
+    public function searchMovie(Request $request)
+    {
+        dd($request->movie);
+
+    }
 }

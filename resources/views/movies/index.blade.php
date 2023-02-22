@@ -8,8 +8,9 @@
 
     <div style="display: flex; justify-content:center">
         <div class="flex w-96">
-            <form>
-                <input type="text" placeholder="Just search for a movie" class="w-80" style="margin: 10px">
+            <form method="POST" action="/movies">
+                @csrf
+                <input type="text" placeholder="Just search for a movie" class="w-80" style="margin: 10px" name="movie">
                 <button style="margin:10px; border:1px solid black; padding:4px"> Search </button>
             </form>
         </div>
