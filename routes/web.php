@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 
 
-Route::get("/movies", [MovieController::class, "index"])->middleware(["auth", "verified"]);
+Route::get("/movies", [MovieController::class, "index"])->middleware(["auth", "verified"])->name("movies.index");
 
 
 Route::get('/dashboard', function () {
@@ -39,4 +39,4 @@ Route::resource('chirps', ChirpController::class)
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
