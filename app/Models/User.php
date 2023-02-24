@@ -47,4 +47,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Chirp::class);
     }
+
+
+    public function seenMovies()
+    {
+        return $this->belongsToMany(Movie::class, "movie_seen_user");
+    }
 }
