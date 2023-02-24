@@ -35,7 +35,10 @@ Route::resource('chirps', ChirpController::class)
     ->middleware(['auth', 'verified']);
 
 
-Route::post("/movies", [MovieController::class, "searchMovie"])->name("movie.search");
+Route::post("/movies", [MovieController::class, "index"])->name("movie.search");
+
+Route::post("/movies/seen", [MovieController::class, "addSeenMovie"])->name("movie.seen");
+
 
 
 
