@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use App\Models\Movie;
 use App\Models\User;
@@ -13,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 class MovieController extends Controller
 {
 
-
     public function index(Request $request)
     {
         $movie = "";
@@ -21,7 +19,6 @@ class MovieController extends Controller
         if (!empty($request->movie)) {
             $movie = $this->searchMovie($request->movie);
         }
-
 
         return view("movies.index", ["movie" => $movie]);
     }
@@ -31,10 +28,8 @@ class MovieController extends Controller
     {
         $movie = $this->searchMovie($request->movie);
         $movie->save();
-
         $movie = Movie::where("title", $movie->title)->first();
         $user = User::find(Auth::user()->id);
-
         $user->seenMovies()->attach($movie->id);
 
         return redirect("/movies");
@@ -45,10 +40,8 @@ class MovieController extends Controller
     {
         $movie = $this->searchMovie($request->movie);
         $movie->save();
-
         $movie = Movie::where("title", $movie->title)->first();
         $user = User::find(Auth::user()->id);
-
         $user->wishMovies()->attach($movie->id);
 
         return redirect("/movies");
@@ -85,8 +78,6 @@ class MovieController extends Controller
     }
 
 
-
-
     public function getSeenMovies()
     {
         $movies = [];
@@ -95,7 +86,6 @@ class MovieController extends Controller
         $movies = $user->seenMovies;
         return view("movies.seen", ["movies" => $movies]);
     }
-
 
 
     public function getWishMovies()

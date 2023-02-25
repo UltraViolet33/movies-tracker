@@ -1,11 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Movies') }}
+            {{ __('Search a Movie') }}
         </h2>
     </x-slot>
-
-
     <div style="display: flex; justify-content:center">
         <div class="flex w-96">
             <form method="POST" action="/movies">
@@ -16,7 +14,6 @@
             </form>
         </div>
     </div>
-
     <div style="display:flex;justify-content:center;align-items:center;height:60vh;">
         @if ($movie)
             <div style="border:2px solid black;padding:10px">

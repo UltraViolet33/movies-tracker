@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Movies') }}
+            {{ __('My Seen Movies') }}
         </h2>
     </x-slot>
     <div style="display:flex; flex-direction:column ;justify-content:space-around;align-items:center;height:60vh;">

@@ -16,33 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
+Route::get("/", [MovieController::class, "index"])->middleware(["auth", "verified"])->name("movies.index");
 
 Route::get("/movies", [MovieController::class, "index"])->middleware(["auth", "verified"])->name("movies.index");
 
+Route::post("/movies", [MovieController::class, "index"])->name("movie.search")->middleware(["auth", "verified"]);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::post("/movies/seen", [MovieController::class, "addSeenMovie"])->middleware(['auth', 'verified'])->name("add.movie.seen");
+Route::post("/movies/wish", [MovieController::class, "addWishMovie"])->middleware(['auth', 'verified'])->name("add.movie.wish");
 
+Route::get("/my-movies", [MovieController::class, "getSeenMovies"])->middleware(['auth', 'verified'])->name("movies.seen");
 
-Route::resource('chirps', ChirpController::class)
-    ->only(['index', 'store', 'edit', 'update', 'destroy'])
-    ->middleware(['auth', 'verified']);
-
-
-Route::post("/movies", [MovieController::class, "index"])->name("movie.search");
-
-Route::post("/movies/seen", [MovieController::class, "addSeenMovie"])->name("add.movie.seen");
-Route::post("/movies/wish", [MovieController::class, "addWishMovie"])->name("add.movie.wish");
-
-Route::get("/my-movies", [MovieController::class, "getSeenMovies"])->name("movies.seen");
-
-Route::get("/my-wish-list", [MovieController::class, "getWishMovies"])->name("movies.wish");
+Route::get("/my-wish-list", [MovieController::class, "getWishMovies"])->middleware(['auth', 'verified'])->name("movies.wish");
 
 
 
