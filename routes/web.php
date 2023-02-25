@@ -38,7 +38,12 @@ Route::resource('chirps', ChirpController::class)
 Route::post("/movies", [MovieController::class, "index"])->name("movie.search");
 
 Route::post("/movies/seen", [MovieController::class, "addSeenMovie"])->name("add.movie.seen");
+Route::post("/movies/wish", [MovieController::class, "addWishMovie"])->name("add.movie.wish");
+
 Route::get("/my-movies", [MovieController::class, "getSeenMovies"])->name("movies.seen");
+
+Route::get("/my-wish-list", [MovieController::class, "getWishMovies"])->name("movies.wish");
+
 
 
 

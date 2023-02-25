@@ -41,6 +41,20 @@ class MovieController extends Controller
     }
 
 
+    public function addWishMovie(Request $request)
+    {
+        $movie = $this->searchMovie($request->movie);
+        $movie->save();
+
+        $movie = Movie::where("title", $movie->title)->first();
+        $user = User::find(Auth::user()->id);
+
+        $user->wishMovies()->attach($movie->id);
+
+        return redirect("/movies");
+    }
+
+
     private function searchMovieFromAPI(string $movieTitle)
     {
         $url = "http://www.omdbapi.com/?t=" . $movieTitle . "&apikey=" . env("API_MOVIE_KEY");
@@ -79,7 +93,17 @@ class MovieController extends Controller
         $user = User::find(Auth::user()->id);
 
         $movies = $user->seenMovies;
-        
         return view("movies.seen", ["movies" => $movies]);
+    }
+
+
+
+    public function getWishMovies()
+    {
+        $movies = [];
+        $user = User::find(Auth::user()->id);
+
+        $movies = $user->wishMovies;
+        return view("movies.wish", ["movies" => $movies]);
     }
 }

@@ -23,12 +23,18 @@
                 <p>title : {{ $movie->title }} </p>
                 <p>Year : {{ $movie->year }} </p>
                 <p>Genre : {{ $movie->genre }} </p>
-                <x-primary-button class="mt-4">{{ __('A voir') }}</x-primary-button>
                 <form method="POST" action="{{ route('add.movie.seen') }}">
                     @csrf
                     @method('post')
                     <x-primary-button onclick="event.preventDefault(); this.closest('form').submit();" class="mt-4">
                         {{ __('Vu') }}</x-primary-button>
+                    <input type="hidden" name="movie" value="{{ $movie->title }}" />
+                </form>
+                <form method="POST" action="{{ route('add.movie.wish') }}">
+                    @csrf
+                    @method('post')
+                    <x-primary-button onclick="event.preventDefault(); this.closest('form').submit();" class="mt-4">
+                        {{ __('A Voir') }}</x-primary-button>
                     <input type="hidden" name="movie" value="{{ $movie->title }}" />
                 </form>
             </div>

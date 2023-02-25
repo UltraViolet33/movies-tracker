@@ -25,6 +25,9 @@
                      <x-nav-link :href="route('movies.seen')" :active="request()->routeIs('movies.seen')">
                         {{ __('My Movies') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('movies.wish')" :active="request()->routeIs('movies.wish')">
+                        {{ __('My Wish List') }}
+                    </x-nav-link>
                 </div>
             </div>
 
