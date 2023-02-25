@@ -17,16 +17,11 @@ class MovieController extends Controller
     public function index(Request $request)
     {
         $movie = "";
-       
 
         if (!empty($request->movie)) {
-            $url = "http://www.omdbapi.com/?t=" . $request->movie . "&apikey=" . env("API_MOVIE_KEY");
-            $response = Http::get($url);
-            $movie = $response->json();
-            // dd($movie);
+            $movie = $this->searchMovie($request->movie);
         }
 
-        // dd($response->json());
 
         return view("movies.index", ["movie" => $movie]);
     }
@@ -34,9 +29,25 @@ class MovieController extends Controller
 
     public function addSeenMovie(Request $request)
     {
-        $movieApi = $this->searchMovie($request->movie);
-        // dd($movieApi);
+        $movie = $this->searchMovie($request->movie);
+        $movie->save();
+
+        $movie = Movie::where("title", $movie->title)->first();
+        $user = User::find(Auth::user()->id);
+
+        $user->seenMovies()->attach($movie->id);
+
+        return redirect("/movies");
+    }
+
+
+    private function searchMovieFromAPI(string $movieTitle)
+    {
+        $url = "http://www.omdbapi.com/?t=" . $movieTitle . "&apikey=" . env("API_MOVIE_KEY");
+        $response = Http::get($url);
+        $movieApi = $response->json();
         $movie = new Movie();
+
         $movie->title = $movieApi["Title"];
         $movie->year = $movieApi["Year"];
         $movie->genre = $movieApi["Genre"];
@@ -44,24 +55,31 @@ class MovieController extends Controller
         $movie->director = $movieApi["Director"];
         $movie->imdbID = $movieApi["imdbID"];
 
-        $movie->save();
+        return $movie;
+    }
 
-        $movie2 = Movie::where("title", $movieApi["Title"])->get();
-        
-        $user = User::find(Auth::user()->id);
 
-        dd($user->seenMovies()->attach($movie->id));
+    private function searchMovie(string $movieTitle): mixed
+    {
+        $movie = Movie::where("title", $movieTitle)->first();
 
-        return redirect("/movies");
+        if (!$movie) {
+            $movie = $this->searchMovieFromAPI($movieTitle);
+        }
+
+        return $movie;
     }
 
 
 
 
-    private function searchMovie(string $movieTitle): array
+    public function getSeenMovies()
     {
-        $url = "http://www.omdbapi.com/?t=" . $movieTitle . "&apikey=" . env("API_MOVIE_KEY");
-        $response = Http::get($url);
-        return $response->json();
+        $movies = [];
+        $user = User::find(Auth::user()->id);
+
+        $movies = $user->seenMovies;
+        
+        return view("movies.seen", ["movies" => $movies]);
     }
 }

@@ -20,16 +20,16 @@
     <div style="display:flex;justify-content:center;align-items:center;height:60vh;">
         @if ($movie)
             <div style="border:2px solid black;padding:10px">
-                <p>title : {{ $movie['Title'] }} </p>
-                <p>Year : {{ $movie['Year'] }} </p>
-                <p>Genre : {{ $movie['Genre'] }} </p>
+                <p>title : {{ $movie->title }} </p>
+                <p>Year : {{ $movie->year }} </p>
+                <p>Genre : {{ $movie->genre }} </p>
                 <x-primary-button class="mt-4">{{ __('A voir') }}</x-primary-button>
-                <form method="POST" action="{{ route('movie.seen') }}">
+                <form method="POST" action="{{ route('add.movie.seen') }}">
                     @csrf
                     @method('post')
                     <x-primary-button onclick="event.preventDefault(); this.closest('form').submit();" class="mt-4">
                         {{ __('Vu') }}</x-primary-button>
-                    <input type="hidden" name="movie" value="{{ $movie['Title'] }}" />
+                    <input type="hidden" name="movie" value="{{ $movie->title }}" />
                 </form>
             </div>
         @endif
