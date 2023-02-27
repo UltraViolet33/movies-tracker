@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Models\Movie;
 use App\Models\User;
-
 use Illuminate\Support\Facades\Auth;
 
 class MovieController extends Controller
@@ -47,7 +46,7 @@ class MovieController extends Controller
                 return redirect("/my-wish-list");
             }
         }
-        
+
         $movie = $this->searchMovie($request->movie);
         $movie->save();
         $movie = Movie::where("title", $movie->title)->first();
