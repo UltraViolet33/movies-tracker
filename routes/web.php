@@ -25,6 +25,10 @@ Route::post("/movies", [MovieController::class, "index"])->name("movie.search")-
 Route::post("/movies/seen", [MovieController::class, "addSeenMovie"])->middleware(['auth', 'verified'])->name("add.movie.seen");
 Route::post("/movies/wish", [MovieController::class, "addWishMovie"])->middleware(['auth', 'verified'])->name("add.movie.wish");
 
+Route::post("/movies/seen/delete", [MovieController::class, "deleteSeenMovie"])->middleware(['auth', 'verified'])->name("delete.movie.seen");
+
+
+
 Route::get("/my-movies", [MovieController::class, "getSeenMovies"])->middleware(['auth', 'verified'])->name("movies.seen");
 
 Route::get("/my-wish-list", [MovieController::class, "getWishMovies"])->middleware(['auth', 'verified'])->name("movies.wish");

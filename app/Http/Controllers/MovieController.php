@@ -38,6 +38,16 @@ class MovieController extends Controller
 
     public function addWishMovie(Request $request)
     {
+        if (isset($request->idMovie)) {
+            $movie = Movie::find($request->idMovie);
+            if ($movie) {
+                $user = User::find(Auth::user()->id);
+                $user->seenMovies()->detach($movie);
+                $user->wishMovies()->attach($movie->id);
+                return redirect("/my-wish-list");
+            }
+        }
+        
         $movie = $this->searchMovie($request->movie);
         $movie->save();
         $movie = Movie::where("title", $movie->title)->first();
@@ -95,5 +105,20 @@ class MovieController extends Controller
 
         $movies = $user->wishMovies;
         return view("movies.wish", ["movies" => $movies]);
+    }
+
+
+
+    public function deleteSeenMovie(Request $request)
+    {
+        $movie = Movie::find($request->idMovie);
+
+        if ($movie) {
+            $user = User::find(Auth::user()->id);
+
+            $user->seenMovies()->detach($movie);
+        }
+
+        return redirect("/my-movies");
     }
 }
