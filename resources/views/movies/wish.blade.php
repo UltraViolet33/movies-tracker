@@ -6,7 +6,7 @@
     </x-slot>
     <div style="display:flex; flex-direction:column ;justify-content:space-around;align-items:center;height:60vh;">
         @foreach ($movies as $movie)
-            <x-movie :$movie />
+            <x-movie-item :$movie />
         @endforeach
     </div>
 </x-app-layout>
