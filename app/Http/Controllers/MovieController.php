@@ -23,12 +23,34 @@ class MovieController extends Controller
     }
 
 
+
+    public function displayMovieDetails(string $movieTitle)
+    {
+        $movie = Movie::where("title", $movieTitle)->first();
+        $user = User::find(Auth::user()->id);
+
+        $isSeen = $user->seenMovies()->where('id', $movie->id)->exists();
+        $isInWishList = $user->wishMovies()->where('id', $movie->id)->exists();
+
+        return view("movies.details", ["movie" => $movie, "isSeen" => $isSeen, "isInWishList" => $isInWishList]);
+    }
+
+
     public function addSeenMovie(Request $request)
     {
+        $user = User::find(Auth::user()->id);
+        if (isset($request->idMovie)) {
+            $movie = Movie::find($request->idMovie);
+            if ($movie) {
+
+                $user->seenMovies()->attach($movie->id);
+                return redirect("/");
+            }
+        }
+
         $movie = $this->searchMovie($request->movie);
         $movie->save();
         $movie = Movie::where("title", $movie->title)->first();
-        $user = User::find(Auth::user()->id);
         $user->seenMovies()->attach($movie->id);
 
         return redirect("/movies");
@@ -41,7 +63,6 @@ class MovieController extends Controller
             $movie = Movie::find($request->idMovie);
             if ($movie) {
                 $user = User::find(Auth::user()->id);
-                $user->seenMovies()->detach($movie);
                 $user->wishMovies()->attach($movie->id);
                 return redirect("/my-wish-list");
             }
@@ -106,6 +127,19 @@ class MovieController extends Controller
         return view("movies.wish", ["movies" => $movies]);
     }
 
+
+    public function deleteWishMovie(Request $request)
+    {
+        $movie = Movie::find($request->idMovie);
+
+        if ($movie) {
+            $user = User::find(Auth::user()->id);
+
+            $user->wishMovies()->detach($movie);
+        }
+
+        return redirect("/my-wish-list");
+    }
 
 
     public function deleteSeenMovie(Request $request)
