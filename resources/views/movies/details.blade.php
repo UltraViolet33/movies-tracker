@@ -13,6 +13,15 @@
                 <p>Genre : {{ $movie->genre }}</p>
                 <p>Plot : {{ $movie->plot }}</p>
                 <p>Director : {{ $movie->director }}</p>
+
+                @if ($movie->categories)
+                    <h3>Genres : </h3>
+                    <ul>
+                        @foreach ($movie->categories as $category)
+                            <li>{{ $category->name }}</li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
             <div class="px-4 py-4">
                 @if ($isSeen)

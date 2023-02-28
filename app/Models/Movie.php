@@ -17,4 +17,11 @@ class Movie extends Model
         "director",
         "imdbID"
     ];
+
+
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, "category_movie");
+    }
 }
