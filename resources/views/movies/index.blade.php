@@ -8,7 +8,7 @@
         <div class="flex w-96">
             <form method="POST" action="/movies">
                 @csrf
-                <input type="text" placeholder="Just search for a movie" class="w-80" style="margin: 10px"
+                <input autofocus type="text" placeholder="Just search for a movie" class="w-80" style="margin: 10px"
                     name="movie">
                 <button style="margin:10px; border:1px solid black; padding:4px"> Search </button>
             </form>
@@ -35,6 +35,8 @@
                     <input type="hidden" name="movie" value="{{ $movie->title }}" />
                 </form>
             </div>
+        @else
+            <p>No movie found ! </p>
         @endif
     </div>
 </x-app-layout>

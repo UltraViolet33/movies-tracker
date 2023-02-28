@@ -19,6 +19,9 @@ class MovieController extends Controller
             $movie = $this->searchMovie($request->movie);
         }
 
+
+
+
         return view("movies.index", ["movie" => $movie]);
     }
 
@@ -83,14 +86,20 @@ class MovieController extends Controller
         $url = "http://www.omdbapi.com/?t=" . $movieTitle . "&apikey=" . env("API_MOVIE_KEY");
         $response = Http::get($url);
         $movieApi = $response->json();
-        $movie = new Movie();
+        
+        if(isset($movieApi["Response"]))
+        {
+            return false;
+        }
 
+        $movie = new Movie();
         $movie->title = $movieApi["Title"];
         $movie->year = $movieApi["Year"];
         $movie->genre = $movieApi["Genre"];
         $movie->plot = $movieApi["Plot"];
         $movie->director = $movieApi["Director"];
         $movie->imdbID = $movieApi["imdbID"];
+
 
         return $movie;
     }
@@ -103,6 +112,7 @@ class MovieController extends Controller
         if (!$movie) {
             $movie = $this->searchMovieFromAPI($movieTitle);
         }
+
 
         return $movie;
     }

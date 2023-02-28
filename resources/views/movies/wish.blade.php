@@ -4,7 +4,7 @@
             {{ __('My Wish List') }}
         </h2>
     </x-slot>
-    <div style="display:flex; flex-direction:column ;justify-content:space-around;align-items:center;height:60vh;">
+    <div style="display:flex; flex-direction:column ;justify-content:space-between;align-items:center;gap:15px;">
         @foreach ($movies as $movie)
             <x-movie-item :$movie />
         @endforeach
