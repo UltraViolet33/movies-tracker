@@ -7,45 +7,41 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Movie;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class MovieController extends Controller
 {
 
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $movie = "";
-
+        $movie = null;
         if (!empty($request->movie)) {
             $movie = $this->searchMovie($request->movie);
+            // dd($movie);
         }
-
-
-
 
         return view("movies.index", ["movie" => $movie]);
     }
 
 
-
-    public function displayMovieDetails(string $movieTitle)
+    public function displayMovieDetails(string $movieTitle): View
     {
         $movie = Movie::where("title", $movieTitle)->first();
         $user = User::find(Auth::user()->id);
-
         $isSeen = $user->seenMovies()->where('id', $movie->id)->exists();
         $isInWishList = $user->wishMovies()->where('id', $movie->id)->exists();
-
         return view("movies.details", ["movie" => $movie, "isSeen" => $isSeen, "isInWishList" => $isInWishList]);
     }
 
 
-    public function addSeenMovie(Request $request)
+    public function addSeenMovie(Request $request): RedirectResponse
     {
         $user = User::find(Auth::user()->id);
+
         if (isset($request->idMovie)) {
             $movie = Movie::find($request->idMovie);
             if ($movie) {
-
                 $user->seenMovies()->attach($movie->id);
                 return redirect("/");
             }
@@ -55,12 +51,11 @@ class MovieController extends Controller
         $movie->save();
         $movie = Movie::where("title", $movie->title)->first();
         $user->seenMovies()->attach($movie->id);
-
         return redirect("/movies");
     }
 
 
-    public function addWishMovie(Request $request)
+    public function addWishMovie(Request $request): RedirectResponse
     {
         if (isset($request->idMovie)) {
             $movie = Movie::find($request->idMovie);
@@ -76,22 +71,16 @@ class MovieController extends Controller
         $movie = Movie::where("title", $movie->title)->first();
         $user = User::find(Auth::user()->id);
         $user->wishMovies()->attach($movie->id);
-
         return redirect("/movies");
     }
 
 
-    private function searchMovieFromAPI(string $movieTitle)
+    private function searchMovieFromAPI(string $movieTitle): Movie
     {
         $url = "http://www.omdbapi.com/?t=" . $movieTitle . "&apikey=" . env("API_MOVIE_KEY");
         $response = Http::get($url);
         $movieApi = $response->json();
         
-        if(isset($movieApi["Response"]))
-        {
-            return false;
-        }
-
         $movie = new Movie();
         $movie->title = $movieApi["Title"];
         $movie->year = $movieApi["Year"];
@@ -99,8 +88,6 @@ class MovieController extends Controller
         $movie->plot = $movieApi["Plot"];
         $movie->director = $movieApi["Director"];
         $movie->imdbID = $movieApi["imdbID"];
-
-
         return $movie;
     }
 
@@ -112,39 +99,32 @@ class MovieController extends Controller
         if (!$movie) {
             $movie = $this->searchMovieFromAPI($movieTitle);
         }
-
-
+      
         return $movie;
     }
 
 
-    public function getSeenMovies()
+    public function getSeenMovies(): View 
     {
-        $movies = [];
         $user = User::find(Auth::user()->id);
-
         $movies = $user->seenMovies;
         return view("movies.seen", ["movies" => $movies]);
     }
 
 
-    public function getWishMovies()
+    public function getWishMovies(): View
     {
-        $movies = [];
         $user = User::find(Auth::user()->id);
-
         $movies = $user->wishMovies;
         return view("movies.wish", ["movies" => $movies]);
     }
 
 
-    public function deleteWishMovie(Request $request)
+    public function deleteWishMovie(Request $request): RedirectResponse
     {
         $movie = Movie::find($request->idMovie);
-
         if ($movie) {
             $user = User::find(Auth::user()->id);
-
             $user->wishMovies()->detach($movie);
         }
 
@@ -152,13 +132,11 @@ class MovieController extends Controller
     }
 
 
-    public function deleteSeenMovie(Request $request)
+    public function deleteSeenMovie(Request $request): RedirectResponse
     {
         $movie = Movie::find($request->idMovie);
-
         if ($movie) {
             $user = User::find(Auth::user()->id);
-
             $user->seenMovies()->detach($movie);
         }
 
